@@ -1,14 +1,20 @@
 import React from 'react'
-import RingLoader from "react-spinners/RingLoader";
+import { CubeSpinner } from "react-spinners-kit";
 
 interface SpinnerProps {
     size?: number;
     loading: boolean;
-    color: string
+    frontColor: string
 }
 
 export const Spinner: React.FC<SpinnerProps> = (props) => {
     return (
-        <RingLoader {...props} />
+        <div style={{ height: '80vh' }} className={props.loading ? 'd-flex justify-content-center align-items-center flex-column' : 'd-none'}>
+            <CubeSpinner {...props} />
+            <div className={props.loading ? 'mt-5' : 'd-none'}>
+                <h5> Loading your Products. Please wait...</h5>
+            </div>
+        </div>
+
     );
 }

@@ -4,7 +4,8 @@ import { ProductModel } from '../models/product';
 import he from "he";
 
 interface productProps extends ProductModel {
-    setShowModal: React.Dispatch<React.SetStateAction<string | null>>;
+    setEditModal: React.Dispatch<React.SetStateAction<string | null>>;
+    setDeleteModal: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
 const IMG_NOTAVAILABLE = 'https://images.squarespace-cdn.com/content/v1/578988fe46c3c4caeebf9a64/1519166675314-L19694E63MJHS3P3BNUV/ke17ZwdGBToddI8pDm48kAf-OpKpNsh_OjjU8JOdDKBZw-zPPgdn4jUwVcJE1ZvWQUxwkmyExglNqGp0IvTJZUJFbgE-7XRK3dMEBRBhUpwkCFOLgzJj4yIx-vIIEbyWWRd0QUGL6lY_wBICnBy59Ye9GKQq6_hlXZJyaybXpCc/sorry-image-not-available.png'
@@ -26,8 +27,8 @@ export const Product: React.FC<productProps> = (product) => {
                 <div className='d-flex justify-content-between'>
                     <Button variant="primary" onClick={() => window.open(product.url, '_blank')!.focus()}>Buy Now !</Button>
                     <div className='d-inline-flex justify-content-end'>
-                        <Button variant="secondary" onClick={() => product.setShowModal(product.id)}>Edit</Button>
-                        <Button className='ml-1' variant="danger" onClick={() => window.open(product.url, '_blank')!.focus()}>Delete</Button>
+                        <Button variant="secondary" onClick={() => product.setEditModal(product.id)}>Edit</Button>
+                        <Button className='ml-1' variant="danger" onClick={() => product.setDeleteModal(product.id)}>Delete</Button>
                     </div>
                 </div>
 

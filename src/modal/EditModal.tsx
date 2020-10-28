@@ -1,11 +1,10 @@
 import React, { useContext, useState } from 'react';
-import { Button, Card, Modal, Form, Spinner } from 'react-bootstrap';
+import { Button, Modal, Form, Spinner } from 'react-bootstrap';
 import { ProductModel } from '../models/product';
 import he from "he";
 import { Formik, Form as FormikForm } from 'formik';
 import { InputField } from "../forms/InputField";
-import { Toast } from '../ui/toast';
-import context from 'react-bootstrap/esm/AccordionContext';
+import { SelectField } from "../forms/SelectField";
 import { GlobalContext } from '../config/globalState';
 
 interface EditModalProps {
@@ -85,32 +84,32 @@ export const EditModal: React.FC<EditModalProps> = ({ product, ...props }) => {
                             </Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
-                            <h6>{product && he.decode(product.productName)}</h6>
+                            <h6>{product && product.productName && he.decode(product.productName)}</h6>
 
                             <Form.Group controlId="alias">
                                 <Form.Label>Product Alias</Form.Label>
-                                <InputField name="alias" type="text" placeholder="Enter product alias name" />
+                                <InputField name="alias" type="text" placeholder="Enter product alias name" autocomplete="off" />
                             </Form.Group>
 
                             <Form.Group controlId="productURL">
                                 <Form.Label>Product URL</Form.Label>
-                                <InputField name="url" type="text" placeholder="Enter Product URL" />
+                                <InputField name="url" type="text" placeholder="Enter Product URL" autocomplete="off" />
                             </Form.Group>
 
                             <Form.Group controlId="cutOffPrice">
                                 <Form.Label>Cut Off Price</Form.Label>
-                                <InputField name="cutOffPrice" type="text" placeholder="Enter Cut Off Price" />
+                                <InputField name="cutOffPrice" type="text" placeholder="Enter Cut Off Price" autocomplete="off" />
                             </Form.Group>
 
                             <Form.Group controlId="imgURL">
                                 <Form.Label>Image URL</Form.Label>
-                                <InputField name="imgURL" type="text" placeholder="Enter Image URL" />
+                                <InputField name="imgURL" type="text" placeholder="Enter Image URL" autocomplete="off" />
                                 <Form.Text className="text-muted">Not required for Amazon Products but still can pe provided to override default image</Form.Text>
                             </Form.Group>
 
                             <Form.Group controlId="portal">
                                 <Form.Label>Portal</Form.Label>
-                                <InputField name="portal" type="text" placeholder="Enter Website Name" />
+                                <SelectField options={['Flipkart', 'Amazon']} name="portal" type="select" placeholder="Enter Website Name" />
                             </Form.Group>
 
                         </Modal.Body>
