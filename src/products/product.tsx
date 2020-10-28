@@ -13,10 +13,10 @@ export const Product: React.FC<productProps> = (product) => {
     const imgURL = product.imgURL || IMG_NOTAVAILABLE;
     return (
         <Card style={{ minWidth: '18rem' }} className='h-100'>
-            <Card.Img variant="top" src={imgURL} style={{ height: '23rem' }} />
-            <Card.Body>
+            <Card.Img variant="top" src={imgURL} />
+            <Card.Body className='d-flex flex-column justify-content-end'>
                 <Card.Title>{product.alias}</Card.Title>
-                <Card.Subtitle className='mt-2 mb-2'>{he.decode(product.productName)}</Card.Subtitle>
+                {product && product.productName && <Card.Subtitle className='mt-2 mb-2'>{he.decode(product.productName)}</Card.Subtitle>}
                 <Card.Text className='mt-4'>
                     Website: {product.portal} <br />
                     Current Price: <b>₹{product.price}</b> <br />

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { CardDeck, Col, Container } from 'react-bootstrap';
 import { EditModal } from '../modal/EditModal';
 import { ProductModel } from '../models/product';
+import { Spinner } from "../ui/Spinner";
 import { Product } from "./product";
 
 interface ProductListProps {
@@ -25,6 +26,7 @@ export const ProductList: React.FC<ProductListProps> = ({ }) => {
         <div className='mt-4 mb-4'>
             <Container>
                 <h1 className='mb-2 pl-1'>Product List</h1>
+                <Spinner loading={true} color='4A90E2' size={120} />
                 <CardDeck>
                     {productList?.map(product =>
                         <Col lg="4" className='mt-4'>
