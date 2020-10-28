@@ -31,7 +31,6 @@ export const Product: React.FC<productProps> = (product) => {
                         <Button className='ml-1' variant="danger" onClick={() => product.setDeleteModal(product.id)}>Delete</Button>
                     </div>
                 </div>
-
             </Card.Body>
         </Card>);
 }

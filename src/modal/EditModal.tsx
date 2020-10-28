@@ -6,6 +6,7 @@ import { Formik, Form as FormikForm } from 'formik';
 import { InputField } from "../forms/InputField";
 import { SelectField } from "../forms/SelectField";
 import { GlobalContext } from '../config/globalState';
+import * as yup from "yup";
 
 interface EditModalProps {
     show: boolean,
@@ -29,6 +30,7 @@ export const EditModal: React.FC<EditModalProps> = ({ product, ...props }) => {
     async function onSubmit(updatedProduct: EditModalFormModel) {
         const test = {
             ...updatedProduct,
+            cutOffPrice: updatedProduct.cutOffPrice.toString().trim(),
             id: product?.id
         }
         setLoading(true);
@@ -54,6 +56,14 @@ export const EditModal: React.FC<EditModalProps> = ({ product, ...props }) => {
         props.onHide();
         console.log('Response', response);
     }
+
+    const schema = yup.object({
+        alias: yup.string().required('Alias name is required'),
+        url: yup.string().required('Product URL is required'),
+        cutOffPrice: yup.string().required('Cutoff price is required').matches(/^[0-9]+$/, 'Only Numbers are supported'),
+        portal: yup.string().required('Portal name is required')
+    });
+
     return (
         <>
             <Modal
@@ -75,7 +85,7 @@ export const EditModal: React.FC<EditModalProps> = ({ product, ...props }) => {
                         console.log('submitting product', product);
                         onSubmit(product);
                     }}
-                // validationSchema={signInValidator}
+                    validationSchema={schema}
                 >{({ dirty, isValid }) =>
                     <FormikForm>
                         <Modal.Header closeButton>

@@ -28,12 +28,20 @@ const inputFieldAdapter = (
 ) => {
         const { field, form, meta, ...rest } = props;
         return (
-            <WrappedComponent {...field}
-                onChange={((val: any) => {
-                    form.setFieldValue(field.name, val.target.value, true)
-                })}
-                {...rest}
-            />
+            <>
+                <WrappedComponent {...field}
+                    onChange={((val: any) => {
+                        form.setFieldValue(field.name, val.target.value, true)
+                    })}
+                    {...rest}
+                    isValid={form.touched[field.name] && !form.errors[field.name]}
+                    isInvalid={!!form.errors[field.name]}
+                />
+                <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                <Form.Control.Feedback type="invalid">
+                    {form.errors[field.name]}
+                </Form.Control.Feedback>
+            </>
         );
     };
 
