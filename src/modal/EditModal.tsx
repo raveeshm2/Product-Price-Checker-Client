@@ -1,12 +1,12 @@
 import React, { useContext, useState } from 'react';
 import { Button, Modal, Form, Spinner } from 'react-bootstrap';
-import { ProductModel } from '../models/product';
+import { ProductModel, ProductFormModel, ProductValidationSchema } from '../models/product';
 import he from "he";
 import { Formik, Form as FormikForm } from 'formik';
 import { InputField } from "../forms/InputField";
 import { SelectField } from "../forms/SelectField";
 import { GlobalContext } from '../config/globalState';
-import * as yup from "yup";
+
 
 interface EditModalProps {
     show: boolean,
@@ -14,20 +14,12 @@ interface EditModalProps {
     product?: ProductModel
 }
 
-export interface EditModalFormModel {
-    alias: string,
-    url: string,
-    cutOffPrice: number,
-    imgURL: string,
-    portal: string
-}
-
 export const EditModal: React.FC<EditModalProps> = ({ product, ...props }) => {
 
     const [loading, setLoading] = useState<boolean>(false);
     const context = useContext(GlobalContext);
 
-    async function onSubmit(updatedProduct: EditModalFormModel) {
+    async function onSubmit(updatedProduct: ProductFormModel) {
         const test = {
             ...updatedProduct,
             cutOffPrice: updatedProduct.cutOffPrice.toString().trim(),
@@ -57,13 +49,6 @@ export const EditModal: React.FC<EditModalProps> = ({ product, ...props }) => {
         console.log('Response', response);
     }
 
-    const schema = yup.object({
-        alias: yup.string().required('Alias name is required'),
-        url: yup.string().required('Product URL is required'),
-        cutOffPrice: yup.string().required('Cutoff price is required').matches(/^[0-9]+$/, 'Only Numbers are supported'),
-        portal: yup.string().required('Portal name is required')
-    });
-
     return (
         <>
             <Modal
@@ -73,7 +58,7 @@ export const EditModal: React.FC<EditModalProps> = ({ product, ...props }) => {
                 centered
                 backdrop="static"
             >
-                <Formik<EditModalFormModel>
+                <Formik<ProductFormModel>
                     initialValues={{
                         alias: product?.alias || '',
                         url: product?.url || '',
@@ -85,7 +70,7 @@ export const EditModal: React.FC<EditModalProps> = ({ product, ...props }) => {
                         console.log('submitting product', product);
                         onSubmit(product);
                     }}
-                    validationSchema={schema}
+                    validationSchema={ProductValidationSchema}
                 >{({ dirty, isValid }) =>
                     <FormikForm>
                         <Modal.Header closeButton>
@@ -124,7 +109,7 @@ export const EditModal: React.FC<EditModalProps> = ({ product, ...props }) => {
 
                         </Modal.Body>
                         <Modal.Footer>
-                            <Button variant="primary" type="submit" disabled={loading}>
+                            <Button variant="primary" type="submit" disabled={loading || !isValid || !dirty} style={{ cursor: loading || !isValid || !dirty ? 'not-allowed' : 'pointer' }}>
                                 <Spinner
                                     as="span"
                                     animation="border"

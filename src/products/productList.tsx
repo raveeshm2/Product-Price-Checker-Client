@@ -6,9 +6,7 @@ import { ProductModel } from '../models/product';
 import { Spinner } from "../ui/Spinner";
 import { Product } from "./product";
 
-interface ProductListProps {
-
-}
+interface ProductListProps { }
 
 export const ProductList: React.FC<ProductListProps> = ({ }) => {
     const [productList, setProductList] = useState<ProductModel[]>();
