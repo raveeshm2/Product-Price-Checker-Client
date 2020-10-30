@@ -104,7 +104,7 @@ export const EditModal: React.FC<EditModalProps> = ({ product, ...props }) => {
 
                             <Form.Group controlId="portal">
                                 <Form.Label>Portal</Form.Label>
-                                <SelectField options={['Flipkart', 'Amazon']} name="portal" type="select" placeholder="Enter Website Name" />
+                                <SelectField options={[{ key: 'Flipkart', value: 'Flipkart' }, { key: 'Amazon', value: 'Amazon' }]} name="portal" type="select" placeholder="Enter Website Name" />
                             </Form.Group>
 
                         </Modal.Body>

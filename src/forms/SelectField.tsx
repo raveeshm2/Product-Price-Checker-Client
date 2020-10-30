@@ -9,8 +9,10 @@ interface SelectFieldProps {
     type?: string,
     className?: string,
     autocomplete?: 'on' | 'off';
-    options: string[]
-
+    options: {
+        key: string,
+        value: string
+    }[],
     name: string,
     placeholder?: string
 }
@@ -27,7 +29,7 @@ const selectFieldAdapter = (
 ) => (
     props: FieldProps<string> & SelectFieldProps
 ) => {
-        const { field, form, meta, ...rest } = props;
+        const { field, form, meta, options, ...rest } = props;
         return (
             <WrappedComponent as="select" {...field}
                 onChange={((val: any) => {
@@ -35,7 +37,7 @@ const selectFieldAdapter = (
                 })}
                 {...rest}
             >
-                {props.options.map(opt => <option key={opt}>{opt}</option>)}
+                {options.map(opt => <option value={opt.key}>{opt.value}</option>)}
             </WrappedComponent>
         );
     };

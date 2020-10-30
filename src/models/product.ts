@@ -25,3 +25,7 @@ export const ProductValidationSchema = yup.object({
     cutOffPrice: yup.string().required('Cutoff price is required').matches(/^[0-9]+$/, 'Only Numbers are supported'),
     portal: yup.string().required('Portal name is required')
 });
+
+export const CRONValidationSchema = yup.object({
+    email: yup.string().required('Email is required').email('Not a valid email address')
+})
