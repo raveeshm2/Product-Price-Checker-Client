@@ -28,4 +28,13 @@ export const ProductValidationSchema = yup.object({
 
 export const CRONValidationSchema = yup.object({
     email: yup.string().required('Email is required').email('Not a valid email address')
-})
+});
+
+export const SettingsValidationSchema = yup.object({
+    currentPassword: yup.string().required('Current password is required'),
+    newPassword: yup.string().min(8, 'Must be atleast 8 characters'),
+    confirmPassword: yup.string().when('newPassword', {
+        is: (val => val && val.trim() !== ''), then: yup.string().required('Password is required').equals([yup.ref('newPassword')], 'Passwords must match'),
+        otherwise: yup.string().max(0, "Please enter new password first")
+    })
+});
