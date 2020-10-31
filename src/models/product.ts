@@ -38,3 +38,7 @@ export const SettingsValidationSchema = yup.object({
         otherwise: yup.string().max(0, "Please enter new password first")
     })
 });
+
+export const LoginValidationSchema = yup.object({
+    password: yup.string().required('Password is required')
+});

@@ -12,8 +12,14 @@ export interface ToastModal {
     show: boolean;
 }
 
+export interface UserModal {
+    token: string;
+    isLoggedIn: boolean;
+}
+
 export interface InitialState {
     toast: ToastModal
+    user: UserModal
 }
 
 export interface UpdateToast {
@@ -21,7 +27,12 @@ export interface UpdateToast {
     payload: ToastModal
 }
 
-export type Action = UpdateToast;
+export interface UpdateUser {
+    type: 'UPDATE_USER',
+    payload: UserModal
+}
+
+export type Action = UpdateToast | UpdateUser;
 
 export interface GlobalState extends InitialState {
     dispatch?: React.Dispatch<Action>
@@ -36,7 +47,11 @@ export const initialState: InitialState = {
         minHeight: '100px',
         top: '5rem',
         right: '5rem',
-        delay: 10000
+        delay: 7000
+    },
+    user: {
+        isLoggedIn: false,
+        token: ''
     }
 }
 
@@ -46,6 +61,14 @@ export function reducer(state = initialState, action: Action): InitialState {
             return {
                 ...state,
                 toast: { ...state.toast, ...action.payload }
+            }
+        case 'UPDATE_USER':
+            return {
+                ...state,
+                user: {
+                    ...state.user,
+                    ...action.payload
+                }
             }
         default:
             return initialState;

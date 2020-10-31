@@ -3,17 +3,17 @@ import './App.scss';
 import { ProductList } from './products/productList';
 import { GlobalContext as Context, reducer, initialState } from './config/globalState';
 import { Toast } from "./ui/toast";
-import { Navigation } from './Navbar/Navigation';
 import { Switch, Route } from 'react-router-dom';
+import { Login } from './login/login';
 
 function App() {
   const [state, dispatch] = useReducer(reducer, initialState);
   return (
     <Context.Provider value={{ ...state, dispatch }}>
-      <Navigation />
       <Toast />
       <Switch>
-        <Route path='/' component={ProductList} />
+        <Route path='/productList' component={ProductList} />
+        <Route path='/' component={Login} />
       </Switch>
     </Context.Provider>
   );
