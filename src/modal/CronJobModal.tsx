@@ -33,7 +33,14 @@ export const CronJobModal: React.FC<CronJobModalProps> = (props) => {
 
     useEffect(() => {
         const getData = async () => {
-            const data = (await fetch('https://vast-eyrie-21993.herokuapp.com/cron/status'));
+            const data = (await fetch(`${process.env.REACT_APP_BASE_URL}/cron/status`, {
+                method: 'GET',
+                credentials: 'include',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-type': 'application/json'
+                }
+            }));
             const status: CronStatusModal = await data.json();
             setCronStatus(status);
             console.log('status', status);
@@ -43,9 +50,11 @@ export const CronJobModal: React.FC<CronJobModalProps> = (props) => {
 
     async function onStart(cron: CronJobFormModal) {
         setLoadStart(true);
-        const data = (await fetch('https://vast-eyrie-21993.herokuapp.com/cron/start', {
+        const data = (await fetch(`${process.env.REACT_APP_BASE_URL}/cron/start`, {
             method: 'POST',
+            credentials: 'include',
             headers: {
+                'Accept': 'application/json',
                 'Content-type': 'application/json'
             },
             body: JSON.stringify(cron)
@@ -68,7 +77,7 @@ export const CronJobModal: React.FC<CronJobModalProps> = (props) => {
 
     async function onStop() {
         setLoadStop(true);
-        const data = (await fetch('https://vast-eyrie-21993.herokuapp.com/cron/stop', {
+        const data = (await fetch(`${process.env.REACT_APP_BASE_URL}/cron/stop`, {
             method: 'POST',
             headers: {
                 'Content-type': 'application/json'

@@ -20,10 +20,12 @@ export const DeleteModal: React.FC<DeleteModalProps> = ({ product, ...props }) =
             id: product?.id
         }
         setLoading(true);
-        const data = (await fetch('https://vast-eyrie-21993.herokuapp.com/product', {
+        const data = (await fetch(`${process.env.REACT_APP_BASE_URL}/product`, {
             method: 'DELETE',
+            credentials: 'include',
             headers: {
-                'Content-type': 'application/json'
+                'Accept': 'application/json',
+                'Content-type': 'application/json',
             },
             body: JSON.stringify(request)
         }));

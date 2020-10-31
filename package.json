@@ -11,8 +11,10 @@
     "@types/react": "^16.9.53",
     "@types/react-dom": "^16.9.8",
     "bootstrap": "^4.5.3",
+    "env-cmd": "^10.1.0",
     "formik": "^2.2.1",
     "he": "^1.2.0",
+    "history": "^5.0.0",
     "react": "^17.0.1",
     "react-bootstrap": "^1.4.0",
     "react-dom": "^17.0.1",
@@ -24,8 +26,10 @@
     "yup": "^0.29.3"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start-dev": "env-cmd -e dev react-scripts start",
+    "build-dev": "env-cmd -e dev react-scripts build",
+    "start-prod": "env-cmd -e prod react-scripts start",
+    "build-prod": "env-cmd -e prod react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -49,6 +53,7 @@
   },
   "devDependencies": {
     "@types/he": "^1.1.1",
+    "@types/history": "^4.7.8",
     "@types/react-router-dom": "^5.1.6",
     "@types/yup": "^0.29.8",
     "node-sass": "^4.14.1"

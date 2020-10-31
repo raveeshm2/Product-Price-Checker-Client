@@ -22,9 +22,11 @@ export const AddProductModal: React.FC<AddProductProps> = (props) => {
             cutOffPrice: updatedProduct.cutOffPrice.toString().trim(),
         }
         setLoading(true);
-        const data = (await fetch('https://vast-eyrie-21993.herokuapp.com/product', {
+        const data = (await fetch(`${process.env.REACT_APP_BASE_URL}/product`, {
             method: 'POST',
+            credentials: 'include',
             headers: {
+                'Accept': 'application/json',
                 'Content-type': 'application/json'
             },
             body: JSON.stringify(product)

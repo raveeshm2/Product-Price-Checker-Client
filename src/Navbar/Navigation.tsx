@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Nav, Navbar } from 'react-bootstrap';
+import { GlobalContext, initialState } from '../config/globalState';
 import { AddProductModal } from "../modal/AddProductModal";
 import { CronJobModal } from "../modal/CronJobModal";
 import { SettingsModal } from '../modal/SettingsModal';
@@ -10,6 +11,7 @@ export const Navigation: React.FC<NavigationProps> = ({ }) => {
     const [addProduct, setAddProduct] = useState<boolean>(false);
     const [cronJob, setCronJob] = useState<boolean>(false);
     const [settings, setSettings] = useState<boolean>(false);
+    const context = useContext(GlobalContext);
     return (
         <>
             <Navbar bg="dark" variant="dark" fixed="top" expand="md">
@@ -21,6 +23,13 @@ export const Navigation: React.FC<NavigationProps> = ({ }) => {
                         <Nav.Link href="#addProduct" onClick={() => setAddProduct(true)}>Add Product</Nav.Link>
                         <Nav.Link href="#cronJobs" onClick={() => setCronJob(true)}>CRON Jobs</Nav.Link>
                         <Nav.Link href="#settings" onClick={() => setSettings(true)}>Settings</Nav.Link>
+                        <Nav.Link href="#logout" onClick={() => {
+                            localStorage.removeItem('token');
+                            context.dispatch!({
+                                type: 'UPDATE_USER',
+                                payload: initialState.user
+                            });
+                        }}>Log out</Nav.Link>
                     </Nav>
                 </Navbar.Collapse>
             </Navbar>

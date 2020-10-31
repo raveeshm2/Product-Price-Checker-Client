@@ -25,9 +25,11 @@ export const SettingsModal: React.FC<SettingsModalProps> = (props) => {
 
     async function onSubmit(user: Pick<SettingsFormModal, "currentPassword" | "newPassword">) {
         setLoading(true);
-        const data = (await fetch('https://vast-eyrie-21993.herokuapp.com/user/change', {
+        const data = (await fetch(`${process.env.REACT_APP_BASE_URL}/user/change`, {
             method: 'PUT',
+            credentials: 'include',
             headers: {
+                'Accept': 'application/json',
                 'Content-type': 'application/json'
             },
             body: JSON.stringify(user)

@@ -26,7 +26,14 @@ export const ProductList: React.FC<ProductListProps> = ({ history }) => {
 
     useEffect(() => {
         const getData = async () => {
-            const data = (await fetch('https://vast-eyrie-21993.herokuapp.com/scrape'));
+            const data = (await fetch(`${process.env.REACT_APP_BASE_URL}/scrape`, {
+                method: 'GET',
+                credentials: 'include',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                }
+            }));
             const list: ProductModel[] = await data.json();
             setProductList(list);
             console.log('list', list);

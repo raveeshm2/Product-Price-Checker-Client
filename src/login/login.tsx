@@ -1,19 +1,18 @@
 import React, { useContext, useState } from 'react';
 import { Formik, Form as FormikForm } from 'formik';
 import { InputField } from "../forms/InputField";
-import { CheckBox } from "../forms/CheckBox";
 import { Form } from 'react-bootstrap';
 import { ButtonSpinner } from '../ui/ButtonSpinner';
 import { LoginValidationSchema } from "../models/product";
-import { GlobalContext } from '../config/globalState';
+import { GlobalContext } from "../config/globalState";
 import { RouteComponentProps } from 'react-router-dom';
 import './login.scss';
 
 interface loginProps extends RouteComponentProps { }
 
 interface LoginFormModel {
-    password: string,
-    keepMeLoggedIn: boolean
+    email: string,
+    password: string
 }
 export const Login: React.FC<loginProps> = ({ history }) => {
 
@@ -23,18 +22,17 @@ export const Login: React.FC<loginProps> = ({ history }) => {
     async function onSubmit(user: LoginFormModel) {
         setLoading(true);
         console.log('user', user);
-        const data = (await fetch('https://vast-eyrie-21993.herokuapp.com/user/login', {
+        const data = (await fetch(`${process.env.REACT_APP_BASE_URL}/user/login`, {
             method: 'POST',
+            credentials: 'include',
             headers: {
-                'Content-type': 'application/json'
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
             },
             body: JSON.stringify(user)
         }));
         const response = await data.json();
         setLoading(false);
-        if (user.keepMeLoggedIn) {
-            localStorage.setItem('token', response?.token);
-        }
         context.dispatch!({
             type: "UPDATE_TOAST",
             payload: {
@@ -65,8 +63,8 @@ export const Login: React.FC<loginProps> = ({ history }) => {
                     <div className="col-xl-5 col-lg-6 col-md-8 col-sm-10 col-xs-2 mx-auto form p-4" style={{ zIndex: 1 }}>
                         <Formik<LoginFormModel>
                             initialValues={{
-                                password: '',
-                                keepMeLoggedIn: true
+                                email: '',
+                                password: ''
                             }}
                             onSubmit={(user) => {
                                 console.log('logging in', user);
@@ -77,12 +75,12 @@ export const Login: React.FC<loginProps> = ({ history }) => {
                             <FormikForm>
                                 <h4 className='pt-1 pb-3'>Sign In</h4>
 
-                                <Form.Group controlId="password">
-                                    <InputField name="password" type="password" placeholder="Enter password" autocomplete="off" />
+                                <Form.Group controlId="email">
+                                    <InputField name="email" type="text" placeholder="Enter email address" autocomplete="off" />
                                 </Form.Group>
 
-                                <Form.Group controlId="keepMeLoggedIn">
-                                    <CheckBox name="keepMeLoggedIn" label="Keep Me Logged In" />
+                                <Form.Group controlId="password">
+                                    <InputField name="password" type="password" placeholder="Enter password" autocomplete="off" />
                                 </Form.Group>
 
                                 <ButtonSpinner

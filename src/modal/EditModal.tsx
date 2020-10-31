@@ -26,9 +26,11 @@ export const EditModal: React.FC<EditModalProps> = ({ product, ...props }) => {
             id: product?.id
         }
         setLoading(true);
-        const data = (await fetch('https://vast-eyrie-21993.herokuapp.com/product', {
+        const data = (await fetch(`${process.env.REACT_APP_BASE_URL}/product`, {
             method: 'PUT',
+            credentials: 'include',
             headers: {
+                'Accept': 'application/json',
                 'Content-type': 'application/json'
             },
             body: JSON.stringify(test)

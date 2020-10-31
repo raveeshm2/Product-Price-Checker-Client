@@ -40,5 +40,6 @@ export const SettingsValidationSchema = yup.object({
 });
 
 export const LoginValidationSchema = yup.object({
+    email: yup.string().required('Email address is required'),
     password: yup.string().required('Password is required')
 });
