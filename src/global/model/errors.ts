@@ -47,9 +47,11 @@ export const makeErrorInterpreter: (
 ) => OptionalInterpreter<Error, Errors> = (
     detector: (e: any) => boolean,
     errorMessage: Errors
-) => (error: any): Errors | undefined => {
+) => (error: Error): Errors | undefined => {
     if (detector(error)) {
-        const serverErrors = error.data && error.data.errors ? error.data.errors : [];
+        const serverErrors: string[] = error.data && error.data.errors ? error.data.errors : [];
+        if (serverErrors.length > 0)
+            return { errors: serverErrors }
         return { errors: [...errorMessage.errors, ...serverErrors] };
     }
     return undefined;

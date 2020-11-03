@@ -22,7 +22,15 @@ export const ProductList: React.FC<ProductListProps> = ({ history }) => {
 
     useEffect(() => {
         dispatch(PRODUCT_LIST_RESOURCE.request(null))
-    }, [dispatch])
+    }, [dispatch]);
+
+    // Redirect to login page if user is not authenticated
+    useEffect(() => {
+        if (response.error?.includes("User is not authenticated")) {
+            history.push('/');
+        }
+    }, [response.error])
+
     return (
         <>
             <Navigation />
