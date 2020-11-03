@@ -1,12 +1,16 @@
-import React, { useContext, useState } from 'react';
-import { Button, Modal, Form, Spinner } from 'react-bootstrap';
-import { ProductModel, ProductFormModel, ProductValidationSchema } from '../models/product';
+import React, { useEffect } from 'react';
+import { Button, Modal, Form } from 'react-bootstrap';
+import { ProductFormModel, ProductValidationSchema } from '../models/product';
 import he from "he";
 import { Formik, Form as FormikForm } from 'formik';
 import { InputField } from "../forms/InputField";
 import { SelectField } from "../forms/SelectField";
-import { GlobalContext } from '../config/globalState';
-
+import { ProductModel } from '../products/productList/models/product';
+import { useDispatch, useSelector } from 'react-redux';
+import { State } from "../root/store/reducer";
+import { ItemRequestState } from '../global/model/state';
+import { EDIT_PRODUCT_RESOURCE } from '../products/productList/store/saga';
+import { ButtonSpinner } from '../ui/ButtonSpinner';
 
 interface EditModalProps {
     show: boolean,
@@ -14,47 +18,30 @@ interface EditModalProps {
     product?: ProductModel
 }
 
-export const EditModal: React.FC<EditModalProps> = ({ product, ...props }) => {
+export const EditModal: React.FC<EditModalProps> = ({ product, show, onHide }) => {
 
-    const [loading, setLoading] = useState<boolean>(false);
-    const context = useContext(GlobalContext);
+    const dispatch = useDispatch();
+    const response = useSelector<State, ItemRequestState<Response>>(state => state.products.editProduct);
 
     async function onSubmit(updatedProduct: ProductFormModel) {
-        const test = {
+        dispatch(EDIT_PRODUCT_RESOURCE.request({
             ...updatedProduct,
-            cutOffPrice: updatedProduct.cutOffPrice.toString().trim(),
-            id: product?.id
-        }
-        setLoading(true);
-        const data = (await fetch(`${process.env.REACT_APP_BASE_URL}/product`, {
-            method: 'PUT',
-            credentials: 'include',
-            headers: {
-                'Accept': 'application/json',
-                'Content-type': 'application/json'
-            },
-            body: JSON.stringify(test)
+            cutOffPrice: parseInt(updatedProduct.cutOffPrice.toString().trim()),
+            id: product!.id
         }));
-        const response = await data.json();
-        setLoading(false);
-        context.dispatch!({
-            type: "UPDATE_TOAST",
-            payload: {
-                show: true,
-                header: <>
-                    <strong className="mr-auto"> {updatedProduct.alias}</strong>
-                </>,
-                body: <>Updated successfully !!</>
-            }
-        })
-        props.onHide();
-        console.log('Response', response);
     }
+
+    useEffect(() => {
+        if (!response.loading && (response.data || response.error)) {
+            onHide();
+        }
+    }, [response, onHide]);
 
     return (
         <>
             <Modal
-                {...props}
+                show={show}
+                onHide={onHide}
                 size="lg"
                 aria-labelledby="contained-modal-title-vcenter"
                 centered
@@ -111,20 +98,14 @@ export const EditModal: React.FC<EditModalProps> = ({ product, ...props }) => {
 
                         </Modal.Body>
                         <Modal.Footer>
-                            <Button variant="primary" type="submit" disabled={loading || !isValid || !dirty} style={{ cursor: loading || !isValid || !dirty ? 'not-allowed' : 'pointer' }}>
-                                <Spinner
-                                    as="span"
-                                    animation="border"
-                                    size="sm"
-                                    role="status"
-                                    aria-hidden="true"
-                                    className={loading ? 'd-inline-block' : 'd-none'}
-                                />
-                                <span className={loading ? 'ml-3 d-inline-block' : 'd-none'}>Loading...</span>
-                                <span className={!loading ? 'd-inline-block' : 'd-none'}>Update</span>
-                            </Button>
-
-                            <Button variant="secondary" onClick={props.onHide}>Close</Button>
+                            <ButtonSpinner
+                                type='submit'
+                                loading={response.loading}
+                                disabled={response.loading || !isValid || !dirty}
+                                loadingText="Loading..."
+                                staticText="Update"
+                            />
+                            <Button variant="secondary" onClick={onHide}>Close</Button>
                         </Modal.Footer>
                     </FormikForm>}
                 </Formik>

@@ -1,8 +1,11 @@
-import React, { useContext, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Button, Modal, Spinner } from 'react-bootstrap';
-import { ProductModel } from '../models/product';
 import he from "he";
-import { GlobalContext } from '../config/globalState';
+import { ProductModel } from '../products/productList/models/product';
+import { State } from "../root/store/reducer";
+import { ItemRequestState } from '../global/model/state';
+import { useDispatch, useSelector } from 'react-redux';
+import { DELETE_PRODUCT_RESOURCE } from '../products/productList/store/saga';
 
 interface DeleteModalProps {
     show: boolean,
@@ -10,44 +13,28 @@ interface DeleteModalProps {
     product?: ProductModel
 }
 
-export const DeleteModal: React.FC<DeleteModalProps> = ({ product, ...props }) => {
+export const DeleteModal: React.FC<DeleteModalProps> = ({ product, show, onHide }) => {
 
-    const [loading, setLoading] = useState<boolean>(false);
-    const context = useContext(GlobalContext);
+    const dispatch = useDispatch();
+    const response = useSelector<State, ItemRequestState<Response>>(state => state.products.deletePRoduct);
 
     async function onSubmit() {
-        const request = {
-            id: product?.id
-        }
-        setLoading(true);
-        const data = (await fetch(`${process.env.REACT_APP_BASE_URL}/product`, {
-            method: 'DELETE',
-            credentials: 'include',
-            headers: {
-                'Accept': 'application/json',
-                'Content-type': 'application/json',
-            },
-            body: JSON.stringify(request)
+        dispatch(DELETE_PRODUCT_RESOURCE.request({
+            id: product!.id
         }));
-        const response = await data.json();
-        setLoading(false);
-        context.dispatch!({
-            type: "UPDATE_TOAST",
-            payload: {
-                show: true,
-                header: <>
-                    <strong className="mr-auto"> {product?.alias}</strong>
-                </>,
-                body: <>Product deleted successfully !!</>
-            }
-        })
-        props.onHide();
-        console.log('Response', response);
     }
+
+    useEffect(() => {
+        if (!response.loading && (response.data || response.error)) {
+            onHide();
+        }
+    }, [response, onHide]);
+
     return (
 
         <Modal
-            {...props}
+            show={show}
+            onHide={onHide}
             size="lg"
             aria-labelledby="contained-modal-title-vcenter"
             centered
@@ -62,19 +49,19 @@ export const DeleteModal: React.FC<DeleteModalProps> = ({ product, ...props }) =
                 <h5>Are you sure, you want to remove this product ?</h5>
             </Modal.Body>
             <Modal.Footer>
-                <Button variant="danger" type="submit" disabled={loading} onClick={onSubmit}>
+                <Button variant="danger" type="submit" disabled={response.loading} onClick={onSubmit}>
                     <Spinner
                         as="span"
                         animation="border"
                         size="sm"
                         role="status"
                         aria-hidden="true"
-                        className={loading ? 'd-inline-block' : 'd-none'}
+                        className={response.loading ? 'd-inline-block' : 'd-none'}
                     />
-                    <span className={loading ? 'ml-3 d-inline-block' : 'd-none'}>Loading...</span>
-                    <span className={!loading ? 'd-inline-block' : 'd-none'}>Yes, I confirm</span>
+                    <span className={response.loading ? 'ml-3 d-inline-block' : 'd-none'}>Loading...</span>
+                    <span className={!response.loading ? 'd-inline-block' : 'd-none'}>Yes, I confirm</span>
                 </Button>
-                <Button variant="primary" onClick={props.onHide}>No</Button>
+                <Button variant="primary" onClick={onHide}>No</Button>
             </Modal.Footer>
 
         </Modal>

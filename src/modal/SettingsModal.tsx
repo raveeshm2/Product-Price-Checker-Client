@@ -1,10 +1,14 @@
-import React, { useContext, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Button, Modal, Form } from 'react-bootstrap';
 import { Formik, Form as FormikForm } from 'formik';
 import { InputField } from "../forms/InputField";
-import { GlobalContext } from '../config/globalState';
 import { ButtonSpinner } from "../ui/ButtonSpinner";
 import { SettingsValidationSchema } from '../models/product';
+import { State } from "../root/store/reducer";
+import { ItemRequestState } from '../global/model/state';
+import { useDispatch, useSelector } from 'react-redux';
+import { Response } from '../global/model/response';
+import { CHANGE_PASSWORD_RESOURCE } from '../login/store/saga';
 
 
 interface SettingsModalProps {
@@ -18,42 +22,26 @@ interface SettingsFormModal {
     confirmPassword: string
 }
 
-export const SettingsModal: React.FC<SettingsModalProps> = (props) => {
+export const SettingsModal: React.FC<SettingsModalProps> = ({ show, onHide }) => {
 
-    const [loading, setLoading] = useState<boolean>(false);
-    const context = useContext(GlobalContext);
+    const dispatch = useDispatch();
+    const response = useSelector<State, ItemRequestState<Response>>(state => state.user.changePassword);
 
     async function onSubmit(user: Pick<SettingsFormModal, "currentPassword" | "newPassword">) {
-        setLoading(true);
-        const data = (await fetch(`${process.env.REACT_APP_BASE_URL}/user/change`, {
-            method: 'PUT',
-            credentials: 'include',
-            headers: {
-                'Accept': 'application/json',
-                'Content-type': 'application/json'
-            },
-            body: JSON.stringify(user)
-        }));
-        const response = await data.json();
-        setLoading(false);
-        context.dispatch!({
-            type: "UPDATE_TOAST",
-            payload: {
-                show: true,
-                header: <>
-                    <strong className="mr-auto">Account Settings</strong>
-                </>,
-                body: <>Updated successfully !!</>
-            }
-        })
-        props.onHide();
-        console.log('Response', response);
+        dispatch(CHANGE_PASSWORD_RESOURCE.request(user));
     }
+
+    useEffect(() => {
+        if (!response.loading && (response.data || response.error)) {
+            onHide();
+        }
+    }, [response, onHide]);
 
     return (
         <>
             <Modal
-                {...props}
+                show={show}
+                onHide={onHide}
                 size="lg"
                 aria-labelledby="contained-modal-title-vcenter"
                 centered
@@ -98,12 +86,12 @@ export const SettingsModal: React.FC<SettingsModalProps> = (props) => {
                         <Modal.Footer>
                             <ButtonSpinner
                                 type='submit'
-                                loading={loading}
-                                disabled={loading || !isValid || !dirty}
+                                loading={response.loading}
+                                disabled={response.loading || !isValid || !dirty}
                                 loadingText='Changing..'
                                 staticText="Submit"
                             />
-                            <Button variant="secondary" onClick={props.onHide}>Close</Button>
+                            <Button variant="secondary" onClick={onHide}>Close</Button>
                         </Modal.Footer>
                     </FormikForm>}
                 </Formik>

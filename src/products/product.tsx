@@ -1,7 +1,7 @@
 import React from 'react'
 import { Button, Card } from 'react-bootstrap';
-import { ProductModel } from '../models/product';
 import he from "he";
+import { ProductModel } from './productList/models/product';
 
 interface productProps extends ProductModel {
     setEditModal: React.Dispatch<React.SetStateAction<string | null>>;

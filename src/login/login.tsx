@@ -1,12 +1,18 @@
-import React, { useContext, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Formik, Form as FormikForm } from 'formik';
 import { InputField } from "../forms/InputField";
 import { Form } from 'react-bootstrap';
 import { ButtonSpinner } from '../ui/ButtonSpinner';
 import { LoginValidationSchema } from "../models/product";
-import { GlobalContext } from "../config/globalState";
 import { RouteComponentProps } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { LOGIN_RESOURCE } from './store/saga';
+import { State } from "../root/store/reducer";
+import { ItemRequestState } from '../global/model/state';
+import { createToast } from '../ui/toast/action';
 import './login.scss';
+import { Response } from '../global/model/response';
+
 
 interface loginProps extends RouteComponentProps { }
 
@@ -14,46 +20,27 @@ interface LoginFormModel {
     email: string,
     password: string
 }
+
 export const Login: React.FC<loginProps> = ({ history }) => {
 
-    const [loading, setLoading] = useState<boolean>(false);
-    const context = useContext(GlobalContext);
+    const dispatch = useDispatch();
+    const response = useSelector<State, ItemRequestState<Response>>(state => state.user.login);
+
+    useEffect(() => {
+        let message: string | undefined = undefined;
+        if (response.data) {
+            message = response.data.message.join('');
+            dispatch(createToast("Success", message));
+            history.push('/productList');
+        }
+        if (response.error) {
+            message = response.error.join('. ');
+            dispatch(createToast("Error", message));
+        }
+    }, [response, dispatch, history]);
 
     async function onSubmit(user: LoginFormModel) {
-        setLoading(true);
-        console.log('user', user);
-        const data = (await fetch(`${process.env.REACT_APP_BASE_URL}/user/login`, {
-            method: 'POST',
-            credentials: 'include',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(user)
-        }));
-        const response = await data.json();
-        setLoading(false);
-        context.dispatch!({
-            type: "UPDATE_TOAST",
-            payload: {
-                show: true,
-                header: <>
-                    <strong className="mr-auto"> Login </strong>
-                </>,
-                body: <>Login Successful !!</>
-            }
-        });
-        context.dispatch!({
-            type: 'UPDATE_USER',
-            payload: {
-                isLoggedIn: true,
-                token: response?.token
-            }
-        })
-        console.log('Response', response);
-        setTimeout(() => {
-            history.push('/productList');
-        }, 1000);
+        dispatch(LOGIN_RESOURCE.request(user));
     }
 
     return (
@@ -85,8 +72,8 @@ export const Login: React.FC<loginProps> = ({ history }) => {
 
                                 <ButtonSpinner
                                     type='submit'
-                                    loading={loading}
-                                    disabled={loading || !isValid || !dirty}
+                                    loading={response.loading}
+                                    disabled={response.loading || !isValid || !dirty}
                                     loadingText='Logging in..'
                                     staticText="Login"
                                 />
@@ -97,7 +84,5 @@ export const Login: React.FC<loginProps> = ({ history }) => {
                 </div>
             </div>
         </div>
-
-
     );
 }

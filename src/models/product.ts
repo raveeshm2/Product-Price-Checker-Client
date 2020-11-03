@@ -1,16 +1,5 @@
 import * as yup from "yup";
 
-export interface ProductModel {
-    id: string
-    alias: string,
-    productName: string,
-    url: string,
-    price: number,
-    cutOffPrice: number,
-    imgURL?: string,
-    portal: string
-}
-
 export interface ProductFormModel {
     alias: string,
     url: string,
