@@ -53,10 +53,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ show, onHide }) =>
                         newPassword: '',
                         confirmPassword: ''
                     }}
-                    onSubmit={(settings) => {
-                        console.log('submitting settings', settings);
-                        onSubmit({ currentPassword: settings.currentPassword, newPassword: settings.newPassword });
-                    }}
+                    onSubmit={(settings) => onSubmit({ currentPassword: settings.currentPassword, newPassword: settings.newPassword })}
                     validationSchema={SettingsValidationSchema}
                 >{({ dirty, isValid }) =>
                     <FormikForm>
@@ -69,17 +66,17 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ show, onHide }) =>
 
                             <Form.Group controlId="currentPassword">
                                 <Form.Label>Current Password</Form.Label>
-                                <InputField name="currentPassword" type="password" placeholder="Please enter current password" autocomplete="off" />
+                                <InputField name="currentPassword" type="password" placeholder="Please enter current password" autoComplete="off" />
                             </Form.Group>
 
                             <Form.Group controlId="newPassword">
                                 <Form.Label>New Password</Form.Label>
-                                <InputField name="newPassword" type="password" placeholder="Please enter new password" autocomplete="off" />
+                                <InputField name="newPassword" type="password" placeholder="Please enter new password" autoComplete="off" />
                             </Form.Group>
 
                             <Form.Group controlId="confirmPassword">
                                 <Form.Label>Confirm Password</Form.Label>
-                                <InputField name="confirmPassword" type="password" placeholder="Please enter same password again" autocomplete="off" />
+                                <InputField name="confirmPassword" type="password" placeholder="Please enter same password again" autoComplete="off" />
                             </Form.Group>
 
                         </Modal.Body>

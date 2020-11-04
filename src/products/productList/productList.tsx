@@ -14,7 +14,7 @@ import { ItemRequestState } from '../../global/model/state';
 
 interface ProductListProps extends RouteComponentProps { }
 
-export const ProductList: React.FC<ProductListProps> = ({ history }) => {
+export const ProductList: React.FC<ProductListProps> = (props) => {
     const [selectedProduct, setSelectedProduct] = useState<string | null>(null);
     const [delectProduct, setDeleteProduct] = useState<string | null>(null);
     const dispatch = useDispatch();
@@ -24,13 +24,6 @@ export const ProductList: React.FC<ProductListProps> = ({ history }) => {
         dispatch(PRODUCT_LIST_RESOURCE.request(null))
     }, [dispatch]);
 
-    // Redirect to login page if user is not authenticated
-    useEffect(() => {
-        if (response.error?.includes("User is not authenticated")) {
-            history.push('/');
-        }
-    }, [response.error])
-
     return (
         <>
             <Navigation />
@@ -39,8 +32,8 @@ export const ProductList: React.FC<ProductListProps> = ({ history }) => {
                     <h1 className='mb-2 pl-1'>Product List</h1>
                     <CardDeck>
                         {response.data.map(product =>
-                            <Col lg="4" className='mt-4'>
-                                <Product key={product.id} {...product} setEditModal={setSelectedProduct} setDeleteModal={setDeleteProduct} />
+                            <Col lg="4" className='mt-4' key={product.id}>
+                                <Product {...product} setEditModal={setSelectedProduct} setDeleteModal={setDeleteProduct} />
                             </Col>
                         )}
                     </CardDeck>

@@ -8,6 +8,7 @@ import { ProductFormModel } from "../../../models/product";
 import { ProductModel, ProductRequestPayload } from "../models/product";
 import { createToast } from "../../../ui/toast/action";
 import { WithId } from "../../../global/model/util";
+import { push } from "connected-react-router";
 
 export const PRODUCT_LIST_RESOURCE = new Resource<null, ProductModel, ItemRequestState<ProductModel>>('/SCRAPE');
 export const ADD_PRODUCT_RESOURCE = new Resource<ProductFormModel, Response, ItemRequestState<Response>>('/ADD_PRODUCT');
@@ -37,6 +38,9 @@ export class ProductListSaga extends SagaBase {
             yield put(PRODUCT_LIST_RESOURCE.response(response));
         } catch (err) {
             yield put(PRODUCT_LIST_RESOURCE.error(err));
+            if (err.errors.includes("User is not authenticated")) {
+                yield put(push('/')); // Redirect to login page
+            }
             yield put(createToast("Error", err.errors.join('. ')));
         }
     }

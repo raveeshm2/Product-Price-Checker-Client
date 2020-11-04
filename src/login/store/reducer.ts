@@ -1,4 +1,4 @@
-import { CHANGE_PASSWORD_RESOURCE, LOGIN_RESOURCE } from "./saga";
+import { CHANGE_PASSWORD_RESOURCE, LOGIN_RESOURCE, LOGOUT_RESOURCE } from "./saga";
 import { ItemRequestState } from "../../global/model/state";
 import { getResourceInitialState, } from "../../global/store/request";
 import { handleUndefinedState, addReducers, combineSimplyfiedReducers } from "../../global/store/reducer";
@@ -9,11 +9,13 @@ import { Response } from "../../global/model/response";
 export interface State {
     login: ItemRequestState<Response>;
     changePassword: ItemRequestState<Response>;
+    logout: ItemRequestState<Response>
 }
 
 export const initialState: State = {
     login: getResourceInitialState(null),
-    changePassword: getResourceInitialState(null)
+    changePassword: getResourceInitialState(null),
+    logout: getResourceInitialState(null)
 };
 
 export const reducer = handleUndefinedState(
@@ -22,7 +24,9 @@ export const reducer = handleUndefinedState(
             // @ts-ignore
             login: LOGIN_RESOURCE.reducer,
             // @ts-ignore
-            changePassword: CHANGE_PASSWORD_RESOURCE.reducer
+            changePassword: CHANGE_PASSWORD_RESOURCE.reducer,
+            // @ts-ignore
+            logout: LOGOUT_RESOURCE.reducer,
         })
     ]),
     initialState

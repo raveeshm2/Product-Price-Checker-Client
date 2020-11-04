@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { BrowserRouter } from 'react-router-dom';
+import { ConnectedRouter } from "connected-react-router";
 import createSagaMiddleware from "redux-saga";
 import { createStore } from './root/store/store';
 import { createBrowserHistory } from "history";
@@ -32,9 +32,9 @@ sagaMiddleware.run(saga.rootSaga.bind(saga));
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <BrowserRouter>
+      <ConnectedRouter history={history}>
         <App />
-      </BrowserRouter>
+      </ConnectedRouter>
     </Provider>
   </React.StrictMode>,
   document.getElementById('root')

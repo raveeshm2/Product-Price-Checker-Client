@@ -3,6 +3,8 @@ import { Nav, Navbar } from 'react-bootstrap';
 import { AddProductModal } from "../modal/AddProductModal";
 import { CronJobModal } from "../cron/CronJobModal";
 import { SettingsModal } from '../modal/SettingsModal';
+import { LOGOUT_RESOURCE } from '../login/store/saga';
+import { useDispatch } from 'react-redux';
 
 interface NavigationProps { }
 
@@ -10,6 +12,8 @@ export const Navigation: React.FC<NavigationProps> = () => {
     const [addProduct, setAddProduct] = useState<boolean>(false);
     const [cronJob, setCronJob] = useState<boolean>(false);
     const [settings, setSettings] = useState<boolean>(false);
+    const dispatch = useDispatch();
+
     return (
         <>
             <Navbar bg="dark" variant="dark" fixed="top" expand="md">
@@ -21,7 +25,7 @@ export const Navigation: React.FC<NavigationProps> = () => {
                         <Nav.Link href="#addProduct" onClick={() => setAddProduct(true)}>Add Product</Nav.Link>
                         <Nav.Link href="#cronJobs" onClick={() => setCronJob(true)}>CRON Jobs</Nav.Link>
                         <Nav.Link href="#settings" onClick={() => setSettings(true)}>Settings</Nav.Link>
-                        <Nav.Link href="#logout">Log out</Nav.Link>
+                        <Nav.Link href="#logout" onClick={() => dispatch(LOGOUT_RESOURCE.request(null))} >Log out</Nav.Link>
                     </Nav>
                 </Navbar.Collapse>
             </Navbar>

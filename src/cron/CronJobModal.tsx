@@ -77,7 +77,7 @@ export const CronJobModal: React.FC<CronJobModalProps> = ({ show, onHide }) => {
 
                         <Form.Group controlId="email">
                             <Form.Label>Email</Form.Label>
-                            <InputField name="email" type="email" placeholder="Enter Your email" autocomplete="off" />
+                            <InputField name="email" type="email" placeholder="Enter Your email" autoComplete="off" />
                         </Form.Group>
 
                         <Form.Group controlId="frequency">

@@ -8,7 +8,7 @@ interface InputFieldProps {
     disabled?: boolean;
     type?: string,
     className?: string,
-    autocomplete?: 'on' | 'off';
+    autoComplete?: 'on' | 'off';
 
     name: string,
     placeholder?: string

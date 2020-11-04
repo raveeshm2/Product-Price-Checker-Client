@@ -28,9 +28,7 @@ export abstract class SagaBase {
      * Distributes actions among the assignment handlers
      */
     *rootSaga(): IterableIterator<any> {
-        console.log('dish');
         for (let key of Object.keys(this.assignment)) {
-            console.log('Running sagas ' + key);
             yield takeEvery(key, this.getHandler(key));
         }
     }

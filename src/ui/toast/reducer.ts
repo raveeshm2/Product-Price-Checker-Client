@@ -19,7 +19,6 @@ export const initialState = {
 export const reducer = (state: ToastState = initialState, action: UpdateToast): ToastState => {
     switch (action.type) {
         case "UPDATE_TOAST":
-            console.log('Inside login reducer');
             return { ...state, ...action.payload }
         default:
             return state;

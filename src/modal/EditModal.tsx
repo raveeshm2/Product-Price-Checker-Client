@@ -55,10 +55,7 @@ export const EditModal: React.FC<EditModalProps> = ({ product, show, onHide }) =
                         imgURL: product?.imgURL || '',
                         portal: product?.portal || '',
                     }}
-                    onSubmit={(product) => {
-                        console.log('submitting product', product);
-                        onSubmit(product);
-                    }}
+                    onSubmit={(product) => onSubmit(product)}
                     validationSchema={ProductValidationSchema}
                 >{({ dirty, isValid }) =>
                     <FormikForm>
@@ -72,22 +69,22 @@ export const EditModal: React.FC<EditModalProps> = ({ product, show, onHide }) =
 
                             <Form.Group controlId="alias">
                                 <Form.Label>Product Alias</Form.Label>
-                                <InputField name="alias" type="text" placeholder="Enter product alias name" autocomplete="off" />
+                                <InputField name="alias" type="text" placeholder="Enter product alias name" autoComplete="off" />
                             </Form.Group>
 
                             <Form.Group controlId="productURL">
                                 <Form.Label>Product URL</Form.Label>
-                                <InputField name="url" type="text" placeholder="Enter Product URL" autocomplete="off" />
+                                <InputField name="url" type="text" placeholder="Enter Product URL" autoComplete="off" />
                             </Form.Group>
 
                             <Form.Group controlId="cutOffPrice">
                                 <Form.Label>Cut Off Price</Form.Label>
-                                <InputField name="cutOffPrice" type="text" placeholder="Enter Cut Off Price" autocomplete="off" />
+                                <InputField name="cutOffPrice" type="text" placeholder="Enter Cut Off Price" autoComplete="off" />
                             </Form.Group>
 
                             <Form.Group controlId="imgURL">
                                 <Form.Label>Image URL</Form.Label>
-                                <InputField name="imgURL" type="text" placeholder="Enter Image URL" autocomplete="off" />
+                                <InputField name="imgURL" type="text" placeholder="Enter Image URL" autoComplete="off" />
                                 <Form.Text className="text-muted">Not required for Amazon Products but still can pe provided to override default image</Form.Text>
                             </Form.Group>
 

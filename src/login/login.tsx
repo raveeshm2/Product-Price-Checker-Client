@@ -21,7 +21,7 @@ interface LoginFormModel {
     password: string
 }
 
-export const Login: React.FC<loginProps> = ({ history }) => {
+export const Login: React.FC<loginProps> = () => {
 
     const dispatch = useDispatch();
     const response = useSelector<State, ItemRequestState<Response>>(state => state.user.login);
@@ -31,13 +31,12 @@ export const Login: React.FC<loginProps> = ({ history }) => {
         if (response.data) {
             message = response.data.message.join('');
             dispatch(createToast("Success", message));
-            history.push('/productList');
         }
         if (response.error) {
             message = response.error.join('. ');
             dispatch(createToast("Error", message));
         }
-    }, [response, dispatch, history]);
+    }, [response.data, response.error, dispatch]);
 
     async function onSubmit(user: LoginFormModel) {
         dispatch(LOGIN_RESOURCE.request(user));
@@ -53,21 +52,18 @@ export const Login: React.FC<loginProps> = ({ history }) => {
                                 email: '',
                                 password: ''
                             }}
-                            onSubmit={(user) => {
-                                console.log('logging in', user);
-                                onSubmit(user);
-                            }}
+                            onSubmit={(user) => onSubmit(user)}
                             validationSchema={LoginValidationSchema}
                         >{({ dirty, isValid }) =>
                             <FormikForm>
                                 <h4 className='pt-1 pb-3'>Sign In</h4>
 
                                 <Form.Group controlId="email">
-                                    <InputField name="email" type="text" placeholder="Enter email address" autocomplete="off" />
+                                    <InputField name="email" type="text" placeholder="Enter email address" autoComplete="off" />
                                 </Form.Group>
 
                                 <Form.Group controlId="password">
-                                    <InputField name="password" type="password" placeholder="Enter password" autocomplete="off" />
+                                    <InputField name="password" type="password" placeholder="Enter password" autoComplete="off" />
                                 </Form.Group>
 
                                 <ButtonSpinner
