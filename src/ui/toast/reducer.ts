@@ -13,7 +13,7 @@ export const initialState = {
     minHeight: '100px',
     top: '5rem',
     right: '5rem',
-    delay: 7000
+    delay: 5000
 }
 
 export const reducer = (state: ToastState = initialState, action: UpdateToast): ToastState => {

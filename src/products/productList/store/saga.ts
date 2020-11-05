@@ -20,10 +20,10 @@ export class ProductListSaga extends SagaBase {
     assignment: {
         [actionType: string]: (action: any) => IterableIterator<any>
     } = {
-            [PRODUCT_LIST_RESOURCE.requestActionType]: this.scrape.bind(this),
-            [ADD_PRODUCT_RESOURCE.requestActionType]: this.addProduct.bind(this),
-            [EDIT_PRODUCT_RESOURCE.requestActionType]: this.editProduct.bind(this),
-            [DELETE_PRODUCT_RESOURCE.requestActionType]: this.deleteProduct.bind(this)
+            [PRODUCT_LIST_RESOURCE.requestActionType]: this.scrape.bind,
+            [ADD_PRODUCT_RESOURCE.requestActionType]: this.addProduct.bind,
+            [EDIT_PRODUCT_RESOURCE.requestActionType]: this.editProduct.bind,
+            [DELETE_PRODUCT_RESOURCE.requestActionType]: this.deleteProduct.bind
         };
 
     /**

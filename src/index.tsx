@@ -13,7 +13,7 @@ import { Provider } from "react-redux";
 import { ProductListSaga } from './products/productList/store/saga';
 import { CronJobsSaga } from './cron/store/saga';
 
-const history = createBrowserHistory();
+export const history = createBrowserHistory();
 const sagaMiddleware = createSagaMiddleware();
 
 const store = createStore(history, [

@@ -9,9 +9,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { LOGIN_RESOURCE } from './store/saga';
 import { State } from "../root/store/reducer";
 import { ItemRequestState } from '../global/model/state';
-import { createToast } from '../ui/toast/action';
 import './login.scss';
 import { Response } from '../global/model/response';
+import { CRON_STATUS_RESOURCE } from '../cron/store/saga';
 
 
 interface loginProps extends RouteComponentProps { }
@@ -26,17 +26,10 @@ export const Login: React.FC<loginProps> = () => {
     const dispatch = useDispatch();
     const response = useSelector<State, ItemRequestState<Response>>(state => state.user.login);
 
+    // Redirect to Product List page when already logged in and not present on product list page
     useEffect(() => {
-        let message: string | undefined = undefined;
-        if (response.data) {
-            message = response.data.message.join('');
-            dispatch(createToast("Success", message));
-        }
-        if (response.error) {
-            message = response.error.join('. ');
-            dispatch(createToast("Error", message));
-        }
-    }, [response.data, response.error, dispatch]);
+        dispatch(CRON_STATUS_RESOURCE.request(null));
+    }, [dispatch])
 
     async function onSubmit(user: LoginFormModel) {
         dispatch(LOGIN_RESOURCE.request(user));
