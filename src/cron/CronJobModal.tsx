@@ -102,11 +102,11 @@ export const CronJobModal: React.FC<CronJobModalProps> = ({ show, onHide }) => {
                     <Modal.Footer>
                         <Container fluid>
                             <Row>
-                                <Col md={12} lg={5} className='pl-0 d-sm-flex'>
+                                <Col xs={12} lg={5} className='pl-0 d-flex justify-content-center justify-content-lg-start'>
                                     <ButtonSpinner variant="danger" onClick={onStop} loading={cronStopResponse.loading} disabled={cronStopResponse.loading || !isValid} staticText="Stop CRON Job" loadingText="Stopping.." />
                                 </Col>
-                                <Col md={12} lg={3}><div className='d-sm-block d-lg-none' style={{ height: '.5rem' }}></div></Col>
-                                <Col md={12} lg={4} className='pr-0 d-flex justify-content-center justify-content-lg-end'>
+                                <Col xs={12} lg={3}><div className='d-sm-block d-lg-none' style={{ height: '.5rem' }}></div></Col>
+                                <Col xs={12} lg={4} className='pr-0 d-flex justify-content-center justify-content-lg-end'>
                                     <ButtonSpinner type="submit" loading={cronStartResponse.loading} disabled={cronStartResponse.loading || !isValid} staticText="Start CRON Job" loadingText="Starting.." />
                                     <Button variant="secondary" className='ml-2' onClick={onHide}>Close</Button>
                                 </Col>
