@@ -17,6 +17,7 @@ export class Resource<RequestPayload, ResponsePayload, State extends RequestStat
     public readonly requestActionType = `${this.type}_REQUEST`;
     public readonly errorActionType = `${this.type}_ERROR`;
     public readonly responseActionType = `${this.type}_RESPONSE`;
+    public readonly clearActionType = `${this.type}_CLEAR`;
 
     request = (payload: RequestPayload) => {
         return {
@@ -40,6 +41,12 @@ export class Resource<RequestPayload, ResponsePayload, State extends RequestStat
         }
     };
 
+    clear = () => {
+        return {
+            type: this.clearActionType
+        }
+    }
+
     reducer = (state: State, action: any): RequestStateBase<any> => {
         switch (action.type) {
             case this.requestActionType:
@@ -60,6 +67,9 @@ export class Resource<RequestPayload, ResponsePayload, State extends RequestStat
                     error: [...action.error.errors],
                     data: action.payload ? action.payload : state.data
                 };
+            case this.clearActionType: {
+                return { ...getResourceInitialState(null) }
+            }
             default:
                 return state;
         }

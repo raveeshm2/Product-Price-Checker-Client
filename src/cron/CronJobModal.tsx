@@ -40,11 +40,18 @@ export const CronJobModal: React.FC<CronJobModalProps> = ({ show, onHide }) => {
     }
 
     useEffect(() => {
-        if ((!cronStartResponse.loading && (cronStartResponse.data || cronStartResponse.error))
-            || (!cronStopResponse.loading && (cronStopResponse.data || cronStopResponse.error))) {
+        return () => {
+            dispatch(CRON_START_RESOURCE.clear());
+            dispatch(CRON_STOP_RESOURCE.clear());
+        }
+    }, [])
+
+    useEffect(() => {
+        if ((show && !cronStartResponse.loading && (cronStartResponse.data || cronStartResponse.error))
+            || (show && !cronStopResponse.loading && (cronStopResponse.data || cronStopResponse.error))) {
             onHide();
         }
-    }, [cronStartResponse, cronStopResponse, onHide]);
+    }, [cronStartResponse, cronStopResponse, onHide, show]);
 
     return (
         <Modal

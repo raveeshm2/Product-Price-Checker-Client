@@ -39,8 +39,8 @@ export const ProductList: React.FC<ProductListProps> = (props) => {
                     </CardDeck>
                 </Container>}
                 <Spinner loading={response.loading ? true : false} frontColor='#4A90E2' size={120} />
-                <EditModal show={selectedProduct ? true : false} onHide={() => { setSelectedProduct(null) }} product={response.data?.find(product => product.id === selectedProduct)} />
-                <DeleteModal show={delectProduct ? true : false} onHide={() => { setDeleteProduct(null) }} product={response.data?.find(product => product.id === delectProduct)} />
+                {selectedProduct && <EditModal show={selectedProduct ? true : false} onHide={() => { setSelectedProduct(null) }} product={response.data?.find(product => product.id === selectedProduct)} />}
+                {delectProduct && <DeleteModal show={delectProduct ? true : false} onHide={() => { setDeleteProduct(null) }} product={response.data?.find(product => product.id === delectProduct)} />}
             </div>
         </>
     );

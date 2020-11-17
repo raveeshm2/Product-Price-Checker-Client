@@ -25,7 +25,13 @@ export const DeleteModal: React.FC<DeleteModalProps> = ({ product, show, onHide 
     }
 
     useEffect(() => {
-        if (!response.loading && (response.data || response.error)) {
+        return () => {
+            dispatch(DELETE_PRODUCT_RESOURCE.clear())
+        }
+    }, [])
+
+    useEffect(() => {
+        if (!response.loading && (response.data || response.error) && show) {
             onHide();
         }
     }, [response, onHide]);

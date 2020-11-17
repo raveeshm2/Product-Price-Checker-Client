@@ -29,9 +29,9 @@ export const Navigation: React.FC<NavigationProps> = () => {
                     </Nav>
                 </Navbar.Collapse>
             </Navbar>
-            <AddProductModal show={addProduct} onHide={() => { setAddProduct(false) }} />
-            <CronJobModal show={cronJob} onHide={() => { setCronJob(false) }} />
-            <SettingsModal show={settings} onHide={() => { setSettings(false) }} />
+            {addProduct && <AddProductModal show={addProduct} onHide={() => { setAddProduct(false) }} />}
+            {cronJob && <CronJobModal show={cronJob} onHide={() => { setCronJob(false) }} />}
+            {settings && <SettingsModal show={settings} onHide={() => { setSettings(false) }} />}
         </>
     );
 }

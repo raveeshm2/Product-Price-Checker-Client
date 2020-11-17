@@ -32,10 +32,16 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ show, onHide }) =>
     }
 
     useEffect(() => {
-        if (!response.loading && (response.data || response.error)) {
+        return () => {
+            dispatch(CHANGE_PASSWORD_RESOURCE.clear())
+        }
+    }, [])
+
+    useEffect(() => {
+        if (!response.loading && (response.data || response.error) && show) {
             onHide();
         }
-    }, [response, onHide]);
+    }, [response, onHide, show]);
 
     return (
         <>

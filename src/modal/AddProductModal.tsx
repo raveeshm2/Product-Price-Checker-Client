@@ -28,10 +28,16 @@ export const AddProductModal: React.FC<AddProductProps> = ({ show, onHide }) => 
     }
 
     useEffect(() => {
-        if (!response.loading && (response.data || response.error)) {
+        return () => {
+            dispatch(ADD_PRODUCT_RESOURCE.clear())
+        }
+    }, [])
+
+    useEffect(() => {
+        if (!response.loading && (response.data || response.error) && show) {
             onHide();
         }
-    }, [response, onHide]);
+    }, [response, onHide, show]);
 
     return (
         <Modal

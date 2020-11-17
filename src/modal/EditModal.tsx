@@ -32,7 +32,13 @@ export const EditModal: React.FC<EditModalProps> = ({ product, show, onHide }) =
     }
 
     useEffect(() => {
-        if (!response.loading && (response.data || response.error)) {
+        return () => {
+            dispatch(EDIT_PRODUCT_RESOURCE.clear())
+        }
+    }, [])
+
+    useEffect(() => {
+        if (!response.loading && (response.data || response.error) && show) {
             onHide();
         }
     }, [response, onHide]);
